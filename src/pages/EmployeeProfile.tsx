@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Mail, MapPin, Calendar, ExternalLink } from "lucide-react";
+import { ArrowLeft, Mail, MapPin, Calendar, Briefcase } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -38,7 +38,6 @@ const expertData: Record<string, {
   },
 };
 
-// Fallback profile
 const fallback = {
   name: "Employee", role: "Engineer", department: "Engineering", location: "Remote",
   email: "employee@company.com", joined: "Jan 2022", bio: "Skilled engineer contributing across multiple projects.",
@@ -48,9 +47,7 @@ const fallback = {
     { name: "React", level: 85, source: "Projects" },
     { name: "Node.js", level: 80, source: "Code commits" },
   ],
-  projects: [
-    { name: "Internal Tool", role: "Developer", date: "2024" },
-  ],
+  projects: [{ name: "Internal Tool", role: "Developer", date: "2024" }],
   contributions: [
     { type: "Code commits", count: 450 },
     { type: "Code reviews", count: 200 },
@@ -63,50 +60,53 @@ export default function EmployeeProfile() {
   const profile = expertData[decodedName] || { ...fallback, name: decodedName || "Unknown" };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-6">
-      <Link to="/search" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+    <div className="p-8 max-w-[960px] mx-auto space-y-6">
+      <Link to="/search" className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors">
         <ArrowLeft className="h-3 w-3" /> Back to search
       </Link>
 
       {/* Header */}
-      <div className="flex items-start gap-4">
-        <div className="h-16 w-16 rounded-full bg-secondary flex items-center justify-center shrink-0">
-          <span className="text-xl font-semibold text-secondary-foreground">
-            {profile.name.split(" ").map((n) => n[0]).join("")}
-          </span>
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-semibold tracking-tight">{profile.name}</h1>
-            <Badge className="font-mono text-xs">Score: {profile.score}</Badge>
+      <Card className="bg-card shadow-sm">
+        <CardContent className="p-6">
+          <div className="flex items-start gap-4">
+            <div className="h-14 w-14 rounded-full bg-primary flex items-center justify-center shrink-0">
+              <span className="text-lg font-semibold text-primary-foreground">
+                {profile.name.split(" ").map((n) => n[0]).join("")}
+              </span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <h1 className="text-xl font-semibold tracking-tight">{profile.name}</h1>
+                <Badge className="font-mono text-[10px] h-5">Score {profile.score}</Badge>
+              </div>
+              <p className="text-sm text-muted-foreground mt-0.5">{profile.role} · {profile.department}</p>
+              <p className="text-sm text-muted-foreground/80 mt-2 leading-relaxed">{profile.bio}</p>
+              <div className="flex items-center gap-4 mt-3 flex-wrap">
+                <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground"><MapPin className="h-3 w-3" />{profile.location}</span>
+                <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground"><Mail className="h-3 w-3" />{profile.email}</span>
+                <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground"><Calendar className="h-3 w-3" />Joined {profile.joined}</span>
+              </div>
+            </div>
           </div>
-          <p className="text-sm text-muted-foreground mt-0.5">{profile.role} · {profile.department}</p>
-          <p className="text-sm text-muted-foreground mt-2">{profile.bio}</p>
-          <div className="flex items-center gap-4 mt-3 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{profile.location}</span>
-            <span className="flex items-center gap-1"><Mail className="h-3 w-3" />{profile.email}</span>
-            <span className="flex items-center gap-1"><Calendar className="h-3 w-3" />Joined {profile.joined}</span>
-          </div>
-        </div>
-      </div>
-
-      <Separator />
+        </CardContent>
+      </Card>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Skills */}
-        <div className="lg:col-span-2 space-y-4">
-          <Card className="border">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base font-medium">AI-Generated Skill Profile</CardTitle>
+        <div className="lg:col-span-2 space-y-6">
+          <Card className="bg-card shadow-sm">
+            <CardHeader className="pb-0 pt-5 px-5">
+              <CardTitle className="text-sm font-medium">AI-Generated Skill Profile</CardTitle>
+              <p className="text-xs text-muted-foreground mt-0.5">Derived from code, docs, and communications</p>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="p-5 space-y-4">
               {profile.skills.map((skill) => (
-                <div key={skill.name} className="space-y-1">
+                <div key={skill.name} className="space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm">{skill.name}</span>
+                    <span className="text-sm font-medium">{skill.name}</span>
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-xs text-muted-foreground">{skill.source}</span>
-                      <span className="font-mono text-xs font-medium w-6 text-right">{skill.level}</span>
+                      <span className="text-[10px] text-muted-foreground font-mono">{skill.source}</span>
+                      <span className="font-mono text-xs font-semibold w-7 text-right">{skill.level}</span>
                     </div>
                   </div>
                   <Progress value={skill.level} className="h-1.5" />
@@ -116,17 +116,22 @@ export default function EmployeeProfile() {
           </Card>
 
           {/* Projects */}
-          <Card className="border">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base font-medium">Project History</CardTitle>
+          <Card className="bg-card shadow-sm">
+            <CardHeader className="pb-0 pt-5 px-5">
+              <CardTitle className="text-sm font-medium">Project History</CardTitle>
             </CardHeader>
-            <CardContent className="p-0">
+            <CardContent className="p-0 mt-3">
               <div className="divide-y">
                 {profile.projects.map((project) => (
-                  <div key={project.name} className="px-5 py-3 flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium">{project.name}</p>
-                      <p className="text-xs text-muted-foreground">{project.role}</p>
+                  <div key={project.name} className="px-5 py-3.5 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="h-8 w-8 rounded-lg bg-muted flex items-center justify-center">
+                        <Briefcase className="h-3.5 w-3.5 text-muted-foreground" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">{project.name}</p>
+                        <p className="text-[11px] text-muted-foreground">{project.role}</p>
+                      </div>
                     </div>
                     <span className="font-mono text-xs text-muted-foreground">{project.date}</span>
                   </div>
@@ -136,16 +141,19 @@ export default function EmployeeProfile() {
           </Card>
         </div>
 
-        {/* Contributions */}
-        <Card className="border h-fit">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base font-medium">Activity</CardTitle>
+        {/* Activity */}
+        <Card className="bg-card shadow-sm h-fit">
+          <CardHeader className="pb-0 pt-5 px-5">
+            <CardTitle className="text-sm font-medium">Activity Summary</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="p-5 space-y-4">
             {profile.contributions.map((c) => (
-              <div key={c.type} className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">{c.type}</span>
-                <span className="font-mono text-sm font-medium">{c.count.toLocaleString()}</span>
+              <div key={c.type}>
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] text-muted-foreground">{c.type}</span>
+                  <span className="font-mono text-sm font-semibold">{c.count.toLocaleString()}</span>
+                </div>
+                <Separator className="mt-3" />
               </div>
             ))}
           </CardContent>
