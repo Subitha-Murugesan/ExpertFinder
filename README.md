@@ -2,6 +2,14 @@
 
 **ExpertFinder** is a SaaS web application that helps companies discover internal experts based on their work history, communication, and project contributions. It analyzes internal company data to identify expertise and make it searchable across the organization.
 
+App link: https://findexperts.lovable.app/
+<img width="720" height="383" alt="image" src="https://github.com/user-attachments/assets/31d9d6d5-2461-451e-b843-eae926cad4cd" />
+<img width="1435" height="774" alt="image" src="https://github.com/user-attachments/assets/9d65efef-3da5-4364-9c27-3ce605aafa8b" />
+<img width="1413" height="741" alt="image" src="https://github.com/user-attachments/assets/b7eaae90-d074-4582-a1ce-7a391cadcb57" />
+<img width="1418" height="769" alt="image" src="https://github.com/user-attachments/assets/ce5c179e-e839-41d5-ad14-051774d6da68" />
+<img width="1423" height="747" alt="image" src="https://github.com/user-attachments/assets/e99a709f-d549-4554-8636-457eb9809c68" />
+
+
 ## Target Users
 
 - Engineering teams looking for domain experts
