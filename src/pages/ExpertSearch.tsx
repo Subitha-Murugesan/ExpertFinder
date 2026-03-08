@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search as SearchIcon, Filter, SlidersHorizontal } from "lucide-react";
+import { Search as SearchIcon, SlidersHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -19,6 +19,11 @@ const allExperts = [
 
 const departments = ["All", "Platform", "AI/ML", "Security", "Product", "Data"];
 
+const avatarColors = [
+  "bg-primary", "bg-expert-purple", "bg-expert-amber", "bg-expert-green",
+  "bg-expert-red", "bg-primary", "bg-expert-purple", "bg-expert-amber",
+];
+
 export default function ExpertSearch() {
   const [query, setQuery] = useState("");
   const [selectedDept, setSelectedDept] = useState("All");
@@ -34,82 +39,92 @@ export default function ExpertSearch() {
   });
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-6">
+    <div className="p-8 max-w-[900px] mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Search Experts</h1>
-        <p className="text-sm text-muted-foreground mt-1">
+        <h1 className="text-xl font-semibold tracking-tight">Search Experts</h1>
+        <p className="text-sm text-muted-foreground mt-0.5">
           Find the right person for any skill or domain
         </p>
       </div>
 
       {/* Search bar */}
-      <div className="relative">
-        <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder="Search by name, skill, or role..."
-          className="pl-10 h-11"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-      </div>
-
-      {/* Filters */}
-      <div className="flex items-center gap-2 flex-wrap">
-        <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
-        {departments.map((dept) => (
-          <Button
-            key={dept}
-            variant={selectedDept === dept ? "default" : "outline"}
-            size="sm"
-            className="h-7 text-xs"
-            onClick={() => setSelectedDept(dept)}
-          >
-            {dept}
-          </Button>
-        ))}
-      </div>
+      <Card className="bg-card shadow-sm">
+        <CardContent className="p-4 space-y-3">
+          <div className="relative">
+            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search by name, skill, or role..."
+              className="pl-10 h-10 border-0 bg-muted/50 focus-visible:ring-1"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
+          <div className="flex items-center gap-2 flex-wrap">
+            <SlidersHorizontal className="h-3.5 w-3.5 text-muted-foreground" />
+            {departments.map((dept) => (
+              <Button
+                key={dept}
+                variant={selectedDept === dept ? "default" : "ghost"}
+                size="sm"
+                className="h-7 text-xs rounded-full px-3"
+                onClick={() => setSelectedDept(dept)}
+              >
+                {dept}
+              </Button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Results */}
-      <div className="space-y-2">
-        <p className="text-xs text-muted-foreground font-mono">
+      <div className="space-y-1.5">
+        <p className="text-[11px] text-muted-foreground font-mono px-1">
           {filtered.length} result{filtered.length !== 1 ? "s" : ""}
         </p>
-        <div className="space-y-2">
-          {filtered.map((expert) => (
-            <Link key={expert.name} to={`/profiles/${encodeURIComponent(expert.name)}`}>
-              <Card className="border hover:border-primary/30 transition-colors cursor-pointer">
-                <CardContent className="p-4 flex items-center justify-between">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center shrink-0">
-                      <span className="text-sm font-medium text-secondary-foreground">
-                        {expert.name.split(" ").map((n) => n[0]).join("")}
-                      </span>
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium">{expert.name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {expert.role} · {expert.department}
-                      </p>
-                    </div>
+
+        <Card className="bg-card shadow-sm overflow-hidden">
+          <div className="divide-y">
+            {filtered.map((expert, i) => (
+              <Link
+                key={expert.name}
+                to={`/profiles/${encodeURIComponent(expert.name)}`}
+                className="flex items-center justify-between px-5 py-4 hover:bg-muted/40 transition-colors"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className={`h-9 w-9 rounded-full ${avatarColors[i % avatarColors.length]} flex items-center justify-center shrink-0`}>
+                    <span className="text-[11px] font-medium text-primary-foreground">
+                      {expert.name.split(" ").map((n) => n[0]).join("")}
+                    </span>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="hidden md:flex gap-1 flex-wrap justify-end">
-                      {expert.skills.map((skill) => (
-                        <Badge key={skill} variant="secondary" className="text-[10px] font-mono">
-                          {skill}
-                        </Badge>
-                      ))}
-                    </div>
-                    <div className="text-right shrink-0 ml-2">
-                      <p className="font-mono text-sm font-medium">{expert.score}</p>
-                      <p className="font-mono text-[10px] text-muted-foreground">{expert.projects} projects</p>
-                    </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium">{expert.name}</p>
+                    <p className="text-[11px] text-muted-foreground">
+                      {expert.role} · {expert.department}
+                    </p>
                   </div>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
-        </div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="hidden md:flex gap-1.5 flex-wrap justify-end">
+                    {expert.skills.slice(0, 3).map((skill) => (
+                      <Badge key={skill} variant="secondary" className="text-[10px] font-mono font-normal">
+                        {skill}
+                      </Badge>
+                    ))}
+                    {expert.skills.length > 3 && (
+                      <Badge variant="secondary" className="text-[10px] font-mono font-normal">
+                        +{expert.skills.length - 3}
+                      </Badge>
+                    )}
+                  </div>
+                  <div className="text-right shrink-0 w-14">
+                    <p className="font-mono text-sm font-semibold">{expert.score}</p>
+                    <p className="font-mono text-[10px] text-muted-foreground">{expert.projects} proj</p>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </Card>
       </div>
     </div>
   );

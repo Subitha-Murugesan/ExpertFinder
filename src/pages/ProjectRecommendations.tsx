@@ -1,8 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Sparkles, Users, ArrowRight } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 const projects = [
   {
@@ -39,54 +38,59 @@ const projects = [
   },
 ];
 
+const statusColor: Record<string, string> = {
+  Active: "bg-expert-green/10 text-expert-green",
+  Staffing: "bg-expert-amber/10 text-expert-amber",
+  Planning: "bg-primary/10 text-primary",
+};
+
 export default function ProjectRecommendations() {
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-6">
+    <div className="p-8 max-w-[960px] mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Project Recommendations</h1>
-        <p className="text-sm text-muted-foreground mt-1">
+        <h1 className="text-xl font-semibold tracking-tight">Project Recommendations</h1>
+        <p className="text-sm text-muted-foreground mt-0.5">
           AI-suggested experts for your active and upcoming projects
         </p>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-5">
         {projects.map((project) => (
-          <Card key={project.name} className="border">
-            <CardHeader className="pb-3">
-              <div className="flex items-start justify-between">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <CardTitle className="text-base font-medium">{project.name}</CardTitle>
-                    <Badge
-                      variant={project.status === "Active" ? "default" : "secondary"}
-                      className="text-[10px] font-mono"
-                    >
+          <Card key={project.name} className="bg-card shadow-sm">
+            <CardHeader className="pb-0 pt-5 px-5">
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <CardTitle className="text-sm font-medium">{project.name}</CardTitle>
+                    <Badge className={`text-[10px] font-mono border-0 ${statusColor[project.status] || ""}`}>
                       {project.status}
                     </Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground mt-1">{project.description}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{project.description}</p>
+                  <div className="flex gap-1.5 mt-2.5 flex-wrap">
+                    {project.requiredSkills.map((skill) => (
+                      <Badge key={skill} variant="outline" className="text-[10px] font-mono font-normal">
+                        {skill}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
-                <Sparkles className="h-4 w-4 text-primary shrink-0 mt-1" />
-              </div>
-              <div className="flex gap-1 mt-2 flex-wrap">
-                {project.requiredSkills.map((skill) => (
-                  <Badge key={skill} variant="outline" className="text-[10px] font-mono">
-                    {skill}
-                  </Badge>
-                ))}
+                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                  <Sparkles className="h-4 w-4 text-primary" />
+                </div>
               </div>
             </CardHeader>
-            <CardContent className="p-0">
+            <CardContent className="p-0 mt-4">
               <div className="divide-y">
                 {project.recommendations.map((rec) => (
                   <Link
                     key={rec.name}
                     to={`/profiles/${encodeURIComponent(rec.name)}`}
-                    className="flex items-center justify-between px-5 py-3 hover:bg-muted/50 transition-colors"
+                    className="flex items-center justify-between px-5 py-3.5 hover:bg-muted/40 transition-colors"
                   >
                     <div className="flex items-center gap-3">
                       <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center shrink-0">
-                        <span className="text-xs font-medium text-secondary-foreground">
+                        <span className="text-[10px] font-medium text-secondary-foreground">
                           {rec.name.split(" ").map((n) => n[0]).join("")}
                         </span>
                       </div>
@@ -94,15 +98,15 @@ export default function ProjectRecommendations() {
                         <p className="text-sm font-medium">{rec.name}</p>
                         <div className="flex gap-1 mt-0.5">
                           {rec.matchedSkills.map((s) => (
-                            <Badge key={s} variant="secondary" className="text-[9px] font-mono">
+                            <Badge key={s} variant="secondary" className="text-[9px] font-mono font-normal h-4">
                               {s}
                             </Badge>
                           ))}
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-sm font-medium">{rec.match}%</span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-mono text-sm font-semibold">{rec.match}%</span>
                       <span className="text-[10px] text-muted-foreground">match</span>
                     </div>
                   </Link>
